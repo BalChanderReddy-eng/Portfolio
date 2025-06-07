@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balchander Reddy Yedla - Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter (for a modern look) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- React & ReactDOM CDNs -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel CDN (for JSX transformation in the browser) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide React Icons (Direct SVG alternative or custom icon system would be needed without a build step) -->
+    <!-- For simplicity in a single HTML file, you might need to use direct SVG icons or a custom icon font/library if Lucide-React doesn't work directly via CDN like this -->
+    <!-- However, we'll try to include the Lucide-React JS file directly, but often react components require a build step.
+         If icons don't show, you'd replace them with inline SVGs or public URLs for icons. -->
+    <!-- For this single-file setup, we will use a workaround for Lucide icons by adding them directly via a simple function if needed,
+         or, ideally, by importing them. Since direct import of component libraries isn't standard in a non-bundled HTML,
+         we'll modify the React code to use simple text/emoji or inline SVGs if the `lucide-react` import fails.
+         For now, keeping the import and noting potential issues. -->
+
+    <style>
+        /* Custom CSS for minor adjustments or animations not easily done with Tailwind */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Basic Fade-in Animations (for hero section elements) */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-down {
+            animation: fadeInDown 0.8s ease-out forwards;
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards 0.2s; /* Delayed for stagger effect */
+        }
+
+        /* Subtle background pattern (optional) */
+        .bg-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34.225V42h-8V34.225zM28 28.182V36h-8v-8.182zM20 22.136V30h-8v-8.136zM12 16.091V24h-8v-8.091zM4 10.045V18H-4v-8.045zM44 40.273V48h-8v-7.727zM52 46.318V54h-8v-7.682zM60 52.364V60h-8v-7.636z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-size: 60px 60px;
+        }
+
+        /* Ensure smooth scrolling behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // Helper to mimic Lucide icons for single-file use if direct import is problematic
+        // In a real project with a build step, you'd use 'lucide-react' directly.
+        // For this single-file, we'll define simple components for the icons used.
+        const LucideIcon = ({ iconName, size = 24, className = '' }) => {
+            const icons = {
+                Mail: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`,
+                Phone: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
+                MapPin: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
+                Linkedin: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>`,
+                Github: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2c3.5 0 4.1-1.3 4.1-2.9 0-.9-.4-1.7-1-2.4a3.8 3.8 0 0 0 0-2.8c0-.6 0-1.4.3-2.1 0 0 1.2 0 2.5 1 1.2.7 2 1.5 2.5 2.5a10 10 0 0 0 0 4.4c-.6 1-1.4 1.8-2.5 2.5-1.3 1-2.5 1-2.5 1V22h-4v-4a4.8 4.8 0 0 0-1-3.2c3.5 0 4.1-1.3 4.1-2.9 0-.9-.4-1.7-1-2.4a3.8 3.8 0 0 0 0-2.8c0-.6 0-1.4.3-2.1 0 0 1.2 0 2.5 1 1.2.7 2 1.5 2.5 2.5a10 10 0 0 0 0 4.4c-.6 1-1.4 1.8-2.5 2.5-1.3 1-2.5 1-2.5 1z"/><path d="M9 18c-3.4 1.2-5.4 3.4-5.4 3.4s1-3.3 2.5-5c1.4-1.6 3.4-2.8 4.8-3.4"/></svg>`,
+                Award: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-award"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17.76 2.062A1 1 0 0 0 17 0H7a1 1 0 0 0-.76.063L8.523 12.89"/></svg>`,
+                Book: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book"><path d="M4 19.5V15a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4.5A2.5 2.5 0 0 1 17.5 22H6.5A2.5 2.5 0 0 1 4 19.5z"/><path d="M12 13V2l6 4v7"/></svg>`,
+                Code: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code"><path d="M16 18h4a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-4"/><path d="M8 6H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"/><path d="m11 12 4 4 4-4"/><path d="m15 12-4-4-4 4"/></svg>`,
+                GraduationCap: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-graduation-cap"><path d="M12 11.66A6.5 6.5 0 0 1 6.5 6H17.5A6.5 6.5 0 0 1 12 11.66Z"/><path d="M12 11.66A6.5 6.5 0 0 0 6.5 6H17.5A6.5 6.5 0 0 0 12 11.66Z"/><path d="M17.5 6.5 12 16 6.5 6.5"/><path d="M6 19s1.5-1.5 6-1.5s6 1.5 6 1.5"/><path d="M12 17.5V19.5"/></svg>`,
+                Briefcase: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-briefcase"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><path d="M12 12h4"/></svg>`,
+                ChevronUp: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up"><path d="m18 15-6-6-6 6"/></svg>`,
+            };
+            return <span className={className} dangerouslySetInnerHTML={{ __html: icons[iconName] || '' }} />;
+        };
+
+        // Main App component
+        const App = () => {
+          // State for scroll-to-top button visibility
+          const [showScrollToTop, setShowScrollToTop] = React.useState(false);
+
+          // Effect to handle scroll events for the scroll-to-top button
+          React.useEffect(() => {
+            const handleScroll = () => {
+              if (window.scrollY > 300) { // Show button after scrolling 300px
+                setShowScrollToTop(true);
+              } else {
+                setShowScrollToTop(false);
+              }
+            };
+
+            window.addEventListener('scroll', handleScroll);
+            return () => window.removeEventListener('scroll', handleScroll);
+          }, []);
+
+          // Function to scroll to the top of the page
+          const scrollToTop = () => {
+            window.scrollTo({
+              top: 0,
+              behavior: 'smooth'
+            });
+          };
+
+          // Helper function to scroll to a specific section
+          const scrollToSection = (id) => {
+            const element = document.getElementById(id);
+            if (element) {
+              element.scrollIntoView({ behavior: 'smooth' });
+            }
+          };
+
+          return (
+            <div className="font-sans antialiased bg-gray-50 text-gray-800 min-h-screen">
+              {/* Scroll to Top Button */}
+              {showScrollToTop && (
+                <button
+                  onClick={scrollToTop}
+                  className="fixed bottom-6 right-6 p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 z-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
+                  aria-label="Scroll to top"
+                >
+                  <LucideIcon iconName="ChevronUp" size={24} />
+                </button>
+              )}
+
+              {/* Navigation Bar */}
+              <nav className="fixed w-full bg-white bg-opacity-95 shadow-md z-50 p-4">
+                <div className="container mx-auto flex justify-between items-center px-4">
+                  <a href="#" className="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors duration-200">
+                    Balchander
+                  </a>
+                  <div className="space-x-6 hidden md:flex">
+                    <button onClick={() => scrollToSection('about')} className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">About</button>
+                    <button onClick={() => scrollToSection('skills')} className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Skills</button>
+                    <button onClick={() => scrollToSection('experience')} className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Experience</button>
+                    <button onClick={() => scrollToSection('projects')} className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Projects</button>
+                    <button onClick={() => scrollToSection('certifications')} className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Certifications</button>
+                    <button onClick={() => scrollToSection('contact')} className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Contact</button>
+                  </div>
+                  {/* Mobile Menu (Hamburger icon - not implemented for brevity, but a common pattern) */}
+                  <div className="md:hidden">
+                    {/* You'd typically add a hamburger icon and a state to toggle a mobile menu here */}
+                    <button className="text-gray-700 focus:outline-none">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                  </div>
+                </div>
+              </nav>
+
+              {/* Hero Section */}
+              <header className="relative bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-24 md:py-32 flex items-center justify-center min-h-screen-1/2 overflow-hidden">
+                <div className="absolute inset-0 bg-pattern opacity-10"></div> {/* Subtle background pattern/texture */}
+                <div className="container mx-auto text-center px-4 relative z-10">
+                  <h1 className="text-5xl md:text-6xl font-extrabold leading-tight mb-4 animate-fade-in-down">
+                    BALCHANDER REDDY YEDLA
+                  </h1>
+                  <p className="text-xl md:text-2xl font-light mb-8 animate-fade-in-up">
+                    Web Developer | AI/ML Enthusiast | Innovator in Web & AI Development
+                  </p>
+                  <div className="flex justify-center space-x-4 mb-10">
+                    <a
+                      href="https://linkedin.com/in/balchanderreddy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-3 bg-white text-blue-600 rounded-full shadow-lg hover:scale-110 transform transition-transform duration-300"
+                      aria-label="LinkedIn Profile"
+                    >
+                      <LucideIcon iconName="Linkedin" size={28} />
+                    </a>
+                    <a
+                      href="https://github.com/BalChander Reddy-eng"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-3 bg-white text-gray-800 rounded-full shadow-lg hover:scale-110 transform transition-transform duration-300"
+                      aria-label="GitHub Profile"
+                    >
+                      <LucideIcon iconName="Github" size={28} />
+                    </a>
+                  </div>
+                  <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                    <button
+                      onClick={() => scrollToSection('projects')}
+                      className="px-8 py-3 bg-white text-blue-600 font-bold rounded-full shadow-xl hover:bg-gray-100 hover:scale-105 transform transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300"
+                    >
+                      View My Work
+                    </button>
+                    <button
+                      onClick={() => scrollToSection('contact')}
+                      className="px-8 py-3 bg-transparent border-2 border-white text-white font-bold rounded-full shadow-xl hover:bg-white hover:text-blue-600 hover:scale-105 transform transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-white"
+                    >
+                      Get in Touch
+                    </button>
+                  </div>
+                </div>
+              </header>
+
+              {/* Main Content Area */}
+              <main className="container mx-auto px-4 py-12 md:py-16">
+
+                {/* About Me Section */}
+                <section id="about" className="mb-16 md:mb-24 scroll-mt-20">
+                  <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-10 flex items-center justify-center">
+                    <LucideIcon iconName="GraduationCap" size={36} className="mr-3 text-blue-600" /> About Me
+                  </h2>
+                  <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 max-w-3xl mx-auto">
+                    <p className="text-lg leading-relaxed text-gray-700 mb-6">
+                      I am <span className="font-semibold text-blue-600">Balchander Reddy Yedla</span>, a dynamic Web Developer currently based in Hyderabad, Telangana. I specialize in crafting robust web applications and have a keen interest in leveraging Artificial Intelligence and Machine Learning to create innovative solutions. My expertise spans across front-end and back-end technologies, with a strong understanding of core computer science concepts.
+                    </p>
+                    <p className="text-lg leading-relaxed text-gray-700 mb-6">
+                      I hold a <span className="font-semibold text-blue-600">B.Tech in Computer Science - Artificial Intelligence and Machine Learning</span> from Geethanjali College of Engineering and Technology (Sep 2022 - May 2025) and a <span className="font-semibold text-blue-600">Diploma in Computer Science</span> from TRR Group of Institutions (Jul 2019 - Sep 2022).
+                    </p>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                      <LucideIcon iconName="Code" size={24} className="mr-2 text-blue-600" /> Key Strengths:
+                    </h3>
+                    <ul className="list-disc list-inside space-y-2 text-lg text-gray-700">
+                      <li>Full-stack web development expertise with HTML, CSS, JavaScript, PHP.</li>
+                      <li>Proficient in AI/ML concepts and their application in real-world problems.</li>
+                      <li>Strong problem-solving skills with a solid grasp of Data Structures and Algorithms.</li>
+                      <li>Experience in designing and implementing secure, user-friendly applications.</li>
+                      <li>Passionate about continuous learning and adopting new technologies (e.g., React.js, Node.js, LLMs).</li>
+                    </ul>
+                  </div>
+                </section>
+
+                {/* Skills Section */}
+                <section id="skills" className="mb-16 md:mb-24 scroll-mt-20">
+                  <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-10 flex items-center justify-center">
+                    <LucideIcon iconName="Book" size={36} className="mr-3 text-blue-600" /> Technical Skills
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    {/* Languages Card */}
+                    <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                        <span className="bg-blue-100 text-blue-600 p-2 rounded-full mr-3"><LucideIcon iconName="Code" size={20} /></span> Languages
+                      </h3>
+                      <ul className="list-disc list-inside text-lg text-gray-700 space-y-1">
+                        <li>Python</li>
+                        <li>Java</li>
+                        <li>PHP</li>
+                        <li>C</li>
+                        <li>C++</li>
+                        <li>JavaScript</li>
+                        <li>HTML</li>
+                        <li>CSS</li>
+                      </ul>
+                    </div>
+
+                    {/* Core CS Concepts Card */}
+                    <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                        <span className="bg-green-100 text-green-600 p-2 rounded-full mr-3"><LucideIcon iconName="Book" size={20} /></span> Core CS Concepts
+                      </h3>
+                      <ul className="list-disc list-inside text-lg text-gray-700 space-y-1">
+                        <li>Data Structures</li>
+                        <li>Algorithms</li>
+                        <li>OOP</li>
+                        <li>Problem Solving</li>
+                      </ul>
+                    </div>
+
+                    {/* Technologies / Frameworks Card */}
+                    <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                        <span className="bg-purple-100 text-purple-600 p-2 rounded-full mr-3"><LucideIcon iconName="Briefcase" size={20} /></span> Technologies / Frameworks
+                      </h3>
+                      <ul className="list-disc list-inside text-lg text-gray-700 space-y-1">
+                        <li>Machine Learning</li>
+                        <li>Artificial Intelligence</li>
+                        <li>React.js</li>
+                        <li>Node.js</li>
+                        <li>Large Language Models (LLMs)</li>
+                      </ul>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Experience Section */}
+                <section id="experience" className="mb-16 md:mb-24 scroll-mt-20">
+                  <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-10 flex items-center justify-center">
+                    <LucideIcon iconName="Briefcase" size={36} className="mr-3 text-blue-600" /> Experience
+                  </h2>
+                  <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 max-w-3xl mx-auto">
+                    <div className="mb-8">
+                      <h3 className="text-2xl font-bold text-gray-900 flex items-center">
+                        Web Developer <span className="text-blue-600 ml-3 text-xl">— HR Management System Website</span>
+                      </h3>
+                      <p className="text-gray-600 text-lg mt-1 mb-3">May 2025 - Present | Hyderabad, Telangana</p>
+                      <ul className="list-disc list-inside space-y-2 text-lg text-gray-700">
+                        <li>Designed and developed a dynamic HR Management System website to automate employee document generation and management.</li>
+                        <li>Implemented features for automated creation of employee letters including offer letters, experience certificates, and payslips.</li>
+                        <li>Developed a secure employee portal allowing staff to view and download their documents anytime.</li>
+                        <li>Integrated email notifications using PHP Mailer to deliver documents directly to employees.</li>
+                        <li>Utilized HTML, CSS, JavaScript, PHP, and PHP Mailer to build a responsive and efficient web application.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Projects Section */}
+                <section id="projects" className="mb-16 md:mb-24 scroll-mt-20">
+                  <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-10 flex items-center justify-center">
+                    <LucideIcon iconName="Code" size={36} className="mr-3 text-blue-600" /> Projects
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    {/* Project 1 */}
+                    <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-3">Cold Email Generation Using LLaMA 3.1</h3>
+                      <p className="text-blue-600 font-semibold mb-4">Python, LLMs, Streamlit</p>
+                      <p className="text-lg text-gray-700 mb-4">
+                        An AI-powered system designed to generate personalized cold emails specifically for job applications.
+                      </p>
+                      <ul className="list-disc list-inside space-y-2 text-lg text-gray-700">
+                        <li>Built an AI-powered system that generates personalized cold emails for job applications.</li>
+                        <li>Utilized LLaMA 3.1 as the core language model for generating professional email content.</li>
+                        <li>Automated extraction of skills and experience from resumes and job descriptions.</li>
+                        <li>Computed job-resume match scores.</li>
+                        <li>Generated emails only for 100% job-resume matches and provided actionable feedback for mismatches.</li>
+                      </ul>
+                      <div className="mt-6">
+                        <a
+                          href="https://github.com/BalChander Reddy-eng/Cold-Email-Generation-using-LLaMA3.1" // Replace with actual project link
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 font-semibold text-lg"
+                        >
+                          <LucideIcon iconName="Github" size={20} className="mr-2" /> View Project
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Project 2 */}
+                    <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-3">Nykaa Men Rating Prediction</h3>
+                      <p className="text-blue-600 font-semibold mb-4">Python, Flask, Machine Learning, Neural Networks</p>
+                      <p className="text-lg text-gray-700 mb-4">
+                        A sentiment analysis and product rating prediction system focused on Nykaa Men products.
+                      </p>
+                      <ul className="list-disc list-inside space-y-2 text-lg text-gray-700">
+                        <li>Built a sentiment analysis and product rating prediction system using NLP techniques (BERT, ROBERTa).</li>
+                        <li>Extracted and analyzed customer reviews to compute precise average product ratings.</li>
+                        <li>Developed a recommendation system to suggest higher-rated alternatives for low-rated products.</li>
+                        <li>Proposed a future enhancement to forecast ratings for new products, supporting proactive marketing.</li>
+                      </ul>
+                      <div className="mt-6">
+                        <a
+                          href="https://github.com/BalChander Reddy-eng/Nykaa_Men_Rating_Prediction" // Replace with actual project link
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 font-semibold text-lg"
+                        >
+                          <LucideIcon iconName="Github" size={20} className="mr-2" /> View Project
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Certifications Section */}
+                <section id="certifications" className="mb-16 md:mb-24 scroll-mt-20">
+                  <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-10 flex items-center justify-center">
+                    <LucideIcon iconName="Award" size={36} className="mr-3 text-blue-600" /> Certifications
+                  </h2>
+                  <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 max-w-3xl mx-auto">
+                    <ul className="list-disc list-inside space-y-3 text-xl text-gray-700">
+                      <li>Artificial Intelligence with Machine Learning</li>
+                      <li>AWS for Beginners</li>
+                      <li>Introduction to Cybersecurity - CISCO</li>
+                    </ul>
+                  </div>
+                </section>
+
+                {/* Contact Section */}
+                <section id="contact" className="mb-16 md:mb-24 scroll-mt-20">
+                  <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-10 flex items-center justify-center">
+                    <LucideIcon iconName="Mail" size={36} className="mr-3 text-blue-600" /> Contact Me
+                  </h2>
+                  <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 max-w-3xl mx-auto">
+                    <p className="text-lg text-gray-700 text-center mb-6">
+                      I'm always open to new opportunities and collaborations. Feel free to reach out!
+                    </p>
+                    <div className="flex flex-col items-center space-y-4 mb-8">
+                      <div className="flex items-center text-xl text-gray-700">
+                        <LucideIcon iconName="Mail" size={24} className="mr-3 text-blue-600" />
+                        <a href="mailto:balchanderreddyyedla@gmail.com" className="hover:text-blue-600 transition-colors duration-200">
+                          balchanderreddyyedla@gmail.com
+                        </a>
+                      </div>
+                      <div className="flex items-center text-xl text-gray-700">
+                        <LucideIcon iconName="Phone" size={24} className="mr-3 text-blue-600" />
+                        <a href="tel:+919381295310" className="hover:text-blue-600 transition-colors duration-200">
+                          +91 93812 95310
+                        </a>
+                      </div>
+                      <div className="flex items-center text-xl text-gray-700">
+                        <LucideIcon iconName="MapPin" size={24} className="mr-3 text-blue-600" />
+                        Uppal, Hyderabad, Telangana
+                      </div>
+                    </div>
+
+                    {/* Simple Contact Form - For a real-world scenario, you'd integrate this with a backend service (e.g., Formspree, Netlify Forms, or a custom Node.js endpoint) */}
+                    <form className="space-y-6">
+                      <div>
+                        <label htmlFor="name" className="block text-lg font-medium text-gray-700 mb-1">Name</label>
+                        <input
+                          type="text"
+                          id="name"
+                          name="name"
+                          className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-lg"
+                          placeholder="Your Name"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="email" className="block text-lg font-medium text-gray-700 mb-1">Email</label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-lg"
+                          placeholder="your.email@example.com"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="message" className="block text-lg font-medium text-gray-700 mb-1">Message</label>
+                        <textarea
+                          id="message"
+                          name="message"
+                          rows="5"
+                          className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-lg"
+                          placeholder="Your message here..."
+                          required
+                        ></textarea>
+                      </div>
+                      <button
+                        type="submit"
+                        className="w-full px-6 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300 text-lg"
+                      >
+                        Send Message
+                      </button>
+                    </form>
+                  </div>
+                </section>
+              </main>
+
+              {/* Footer */}
+              <footer className="bg-gray-900 text-white py-8 text-center">
+                <div className="container mx-auto px-4">
+                  <p className="text-lg">© {new Date().getFullYear()} Balchander Reddy Yedla. All Rights Reserved.</p>
+                  <div className="flex justify-center space-x-6 mt-4">
+                    <a href="https://linkedin.com/in/balchanderreddy" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors duration-200" aria-label="LinkedIn Profile">
+                      <LucideIcon iconName="Linkedin" size={24} />
+                    </a>
+                    <a href="https://github.com/BalChander Reddy-eng" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors duration-200" aria-label="GitHub Profile">
+                      <LucideIcon iconName="Github" size={24} />
+                    </a>
+                  </div>
+                </div>
+              </footer>
+            </div>
+          );
+        };
+
+        // Render the App component into the 'root' div
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>
